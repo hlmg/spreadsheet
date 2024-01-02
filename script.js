@@ -6,12 +6,14 @@ const spreadsheet = [];
 const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
 class Cell {
-  constructor(isHeader, disabled, data, row, column, active = false) {
+  constructor(isHeader, disabled, data, row, column, rowName, columnName, active = false) {
     this.isHeader = isHeader;
     this.disabled = disabled;
     this.data = data;
     this.row = row;
     this.column = column;
+    this.rowName = rowName;
+    this.columnName = columnName;
     this.active = active;
   }
 }
@@ -59,7 +61,10 @@ function initSpreadsheet() {
         cellData = "";
       }
 
-      const cell = new Cell(isHeader, disabled, cellData, i, j, false);
+      const rowName = i;
+      const columnName = alphabet[j - 1];
+
+      const cell = new Cell(isHeader, disabled, cellData, i, j, rowName, columnName, false);
       spreadsheetRow.push(cell);
     }
     spreadsheet.push(spreadsheetRow);
@@ -97,6 +102,7 @@ function handleCellClick(cell) {
   const columnHeaderEl = getElFromRowCol(columnHeader.row, columnHeader.column);
   rowHeaderEl.classList.add('active');
   columnHeaderEl.classList.add('active');
+  document.querySelector("#cell-status").innerHTML = cell.columnName + cell.rowName;
 }
 
 function getElFromRowCol(row, column) {
